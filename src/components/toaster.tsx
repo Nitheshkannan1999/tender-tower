@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 interface ToasterProps {
-  message: string | null; // Define the type of 'message'
+  message: string | null; // Define the type of 'message',
+  setMessage: (msg: string) => void;
 }
 
-const Toaster: React.FC<ToasterProps> = ({ message }) => {
+const Toaster: React.FC<ToasterProps> = ({ message, setMessage }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -12,7 +13,8 @@ const Toaster: React.FC<ToasterProps> = ({ message }) => {
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
-      }, 3000); // Hide the toaster after 3 seconds
+        setMessage("");
+      }, 2000); // Hide the toaster after 2 seconds
 
       return () => clearTimeout(timer);
     }

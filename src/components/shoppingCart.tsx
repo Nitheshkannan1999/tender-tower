@@ -58,6 +58,7 @@ const ShoppingCart: React.FC = () => {
           ? [...cartItems, await addItemToCart(item)]
           : await updateCartItem(item);
       setCartItems(updatedCart);
+      setMessage("");
       setMessage(`Cart Item ${type.toLowerCase()}d successfully`);
     } catch (error) {
       console.error(`Error ${type.toLowerCase()}ing item in cart:`, error);
@@ -70,6 +71,7 @@ const ShoppingCart: React.FC = () => {
     try {
       const updatedCart = await removeCartItem(id);
       setCartItems(updatedCart);
+      setMessage("");
       setMessage("Cart Item removed successfully");
     } catch (error) {
       console.error("Error removing item from cart:", error);
@@ -101,7 +103,7 @@ const ShoppingCart: React.FC = () => {
           Add Item
         </button>
       </div>
-      <Toaster message={message} />
+      <Toaster message={message} setMessage={setMessage} />
       <Popup
         type={popupDefaultValue.id ? "Update" : "Add"}
         isOpen={isPopupOpen}
