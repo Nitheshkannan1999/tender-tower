@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port your app runs on (default is 3000 for Astro.js)
-EXPOSE 4321
+EXPOSE 3000
 
 # Command to run your application
-CMD ["npm","start"]
+CMD ["npm","run","dev"]

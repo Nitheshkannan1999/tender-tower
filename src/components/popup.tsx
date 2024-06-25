@@ -24,10 +24,16 @@ const Popup: React.FC<PopupProps> = ({
   defaultValue,
 }) => {
   const [formData, setFormData] = useState(defaultValue);
+  const [errors, setErrors] = useState<{
+    name?: string;
+    price?: number;
+    quantity?: number;
+  }>({});
 
   useEffect(() => {
     if (isOpen) {
       setFormData(defaultValue);
+      setErrors({});
     }
   }, [isOpen, defaultValue]);
 
@@ -40,8 +46,26 @@ const Popup: React.FC<PopupProps> = ({
   };
 
   const handleSubmit = () => {
-    onSubmit(formData, type);
-    onClose();
+    const newErrors: { name?: string; price?: string; quantity: string } = {};
+
+    if (!formData.name) {
+      newErrors.name = "Name cannot be empty.";
+    }
+
+    if (formData.price <= 0) {
+      newErrors.price = "Price must be greater than zero.";
+    }
+
+    if (formData.quantity <= 0) {
+      newErrors.quantity = "Quantity must be greater than zero.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      onSubmit(formData, type);
+      onClose();
+    }
   };
 
   if (!isOpen) return null;
@@ -62,15 +86,20 @@ const Popup: React.FC<PopupProps> = ({
       <div className="popup-content">
         <h2>{`${type} Cart Item`}</h2>
         {fields.map((field) => (
-          <label key={field.name}>
-            {field.label}:
-            <input
-              type={field.type}
-              name={field.name}
-              value={field.value}
-              onChange={handleChange}
-            />
-          </label>
+          <div key={field.name}>
+            <label>
+              {field.label}:
+              <input
+                type={field.type}
+                name={field.name}
+                value={field.value}
+                onChange={handleChange}
+              />
+            </label>
+            {errors[field.name] && (
+              <div className="error-message">{errors[field.name]}</div>
+            )}
+          </div>
         ))}
         <div className="buttonCont">
           <button onClick={handleSubmit}>Submit</button>
