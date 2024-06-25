@@ -30,10 +30,6 @@ const ShoppingCart: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    loadCartItems();
-  }, []);
-
   const handleOpenPopup = (
     type: string,
     item: CartItemType = popupDefaultValue
@@ -44,6 +40,12 @@ const ShoppingCart: React.FC = () => {
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
+    setPopupDefaultValue({
+      name: "",
+      price: 0,
+      quantity: 1,
+      id: "",
+    });
   };
 
   const handleAddOrUpdateCartItem = async (
@@ -74,6 +76,10 @@ const ShoppingCart: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    loadCartItems();
+  }, []);
+
   return (
     <>
       <div className="shopping-cart">
@@ -84,7 +90,7 @@ const ShoppingCart: React.FC = () => {
               key={item.id}
               item={item}
               onUpdate={() => handleOpenPopup("Update", item)}
-              onRemove={handleRemoveItem}
+              onRemove={() => handleRemoveItem(item.id)}
             />
           ))}
         </ul>
